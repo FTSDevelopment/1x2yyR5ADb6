@@ -1,0 +1,15 @@
+body {
+	margin-top: 50px;
+	margin-bottom: 50px;
+	background: none;
+	color: white;
+	overflow-x: hidden;
+}
+
+button {
+	color: black;
+}
+
+.full {
+  background-color: #282828;
+}

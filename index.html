@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html class="full" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>jFront</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <style>
+    .trickButton {
+      float: left;
+      background-color: #282828;
+      color: white;
+      border: 2px solid white;
+      border-radius: 5px;
+      height: 40px;
+      width: 140px;
+    }
+
+    .boundsBox {
+      position: absolute;
+      top: 45%;
+      left: 10%;
+      padding: 32px;
+      overflow: hidden;
+    }
+
+    #top, #bottom, #left, #right {
+	    background: #282828;
+	    position: fixed;
+	  }
+	  #left, #right {
+		  top: 0; bottom: 0;
+		  width: 0.5%;
+	  }
+	  #left {
+      left: 0;
+    }
+		#right {
+      right: 0;
+    }
+	  #top {
+		  left: 0; right: 0;
+		  height: 0.5%;
+		}
+		#top {
+      top: 0;
+    }
+    #bottom {
+      left: 0; right: 0;
+		  height: 0.5%;
+    }
+    #bottom {
+      bottom: 0;
+    }
+  </style>
+  </head>
+  <body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <h1>jFront</h1>
+                <p id='hi'>Why hello there! Welcome to my new website! This is an effort to lower the amount of DDoSing on my site! I could not afford cloudfront! Click the button to authenticate your humanity! I hope you enjoy!</p>
+
+            </div>
+        </div>
+
+    </div>
+    <button class="trickButton">I Am Human</button>
+
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="top"></div>
+    <div id="bottom"></div>
+
+    <script src="js/jquery.js"></script>
+
+    <script src="js/bootstrap.min.js"></script>
+
+    <script>
+    Math.Vector = function (x,y) {
+      this.x = x;
+      this.y = y;
+    }
+    Math.Vector.prototype = {
+      clone: function () {
+        return new Math.Vector(this.x, this.y);
+      },
+      negate: function () {
+        this.x = -this.x;
+        this.y = -this.y;
+        return this;
+      },
+      neg: function () {
+        return this.clone().negate();
+      },
+      addeq: function (v) {
+        this.x += v.x;
+        this.y += v.y;
+        return this;
+      },
+      subeq: function (v) {
+        return this.addeq(v.neg());
+      },
+      add: function (v) {
+        return this.clone().addeq(v);
+      },
+      sub: function (v) {
+        return this.clone().subeq(v);
+      },
+      multeq: function (c) {
+        this.x *= c;
+        this.y *= c;
+        return this;
+      },
+      diveq: function (c) {
+        this.x /= c;
+        this.y /= c;
+        return this;
+      },
+      mult: function (c) {
+        return this.clone().multeq(c);
+      },
+      div: function (c) {
+        return this.clone().diveq(c);
+      },
+
+      dot: function (v) {
+        return this.x * v.x + this.y * v.y;
+      },
+      length: function () {
+        return Math.sqrt(this.dot(this));
+      },
+      normal: function () {
+        return this.clone().diveq(this.length());
+      }
+    };
+
+    function evade(evt) {
+      var $this = $(this),
+        corner = $this.offset(),
+        center = {x: corner.left + $this.outerWidth() / 2, y: corner.top + $this.outerHeight() / 2},
+        dist = new Math.Vector(center.x - evt.pageX, center.y - evt.pageY),
+        closest = $this.outerWidth() / 2;
+
+      if (dist.length() >= closest) {
+        return;
+      }
+
+      var delta = dist.normal().multeq(closest).sub(dist),
+        newCorner = {left: corner.left + delta.x, top: corner.top + delta.y};
+
+      var padding = parseInt($this.css('padding-left'));
+      if (newCorner.left < -padding) {
+        newCorner.left = -padding;
+      } else if (newCorner.left + $this.outerWidth() - padding > $(document).width()) {
+        newCorner.left = $(document).width() - $this.outerWidth() + padding;
+      }
+      if (newCorner.top < -padding) {
+        newCorner.top = -padding;
+      } else if (newCorner.top + $this.outerHeight() - padding > $(document).height()) {
+        newCorner.top = $(document).height() - $this.outerHeight() + padding;
+      }
+
+      $this.offset(newCorner);
+    }
+
+    function beginEvade() {
+      $(this).bind('mousemove', evade);
+    }
+
+    function endEvade() {
+      $(this).unbind('mousemove', evade);
+    }
+
+
+    $(function () {
+      $('.trickButton').wrap('<span class="boundsBox" />')
+
+      $('.boundsBox').bind('mouseover', beginEvade);
+      $('.boundsBox').bind('mouseout', endEvade);
+    });
+
+    </script>
+<script>
+
+function goUDLR(a) {
+  $('.trickButton').hide();
+  $('.boundsBox').hide();
+  if(a == 'right'){
+    $(".boundsBox").animate({
+    left: '85%'
+  }, 200, function() {
+     $('.trickButton').show();
+     $('.boundsBox').show();
+   });
+ }else if(a == 'left'){
+    $(".boundsBox").animate({
+      left: '5%'
+    }, 200, function() {
+      $('.trickButton').show();
+      $('.boundsBox').show();
+    });
+  }else if(a == 'up'){
+     $(".boundsBox").animate({
+       top: '5%'
+     }, 200, function() {
+       $('.trickButton').show();
+       $('.boundsBox').show();
+     });
+   }else if(a == 'down'){
+      $(".boundsBox").animate({
+        top: '83%'
+      }, 200, function() {
+        $('.trickButton').show();
+        $('.boundsBox').show();
+      });
+    }
+}
+
+//isCollide code recieved from http://stackoverflow.com/questions/2440377/javascript-collision-detection
+function isCollide(a, b) {
+    var aRect = a.getBoundingClientRect();
+    var bRect = b.getBoundingClientRect();
+
+    return !(
+        ((aRect.top + aRect.height) < (bRect.top)) ||
+        (aRect.top > (bRect.top + bRect.height)) ||
+        ((aRect.left + aRect.width) < bRect.left) ||
+        (aRect.left > (bRect.left + bRect.width))
+    );
+}
+//end
+
+setInterval(function(){
+  var button = document.querySelector('.trickButton');
+  var rightDiv = document.querySelector('#right');
+  var leftDiv = document.querySelector('#left');
+  var topDiv = document.querySelector('#top');
+  var bottomDiv = document.querySelector('#bottom');
+  if(isCollide(button, leftDiv)){
+    goUDLR('right');
+  }else if(isCollide(button, rightDiv)){
+    goUDLR('left');
+  }else if(isCollide(button, bottomDiv)){
+    goUDLR('up');
+  }else if(isCollide(button, topDiv)){
+    goUDLR('down');
+  }
+}, 500);
+
+</script>
+  </body>
+</html>
